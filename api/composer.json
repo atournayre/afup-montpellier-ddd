@@ -1,6 +1,12 @@
 {
     "type": "project",
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mdavid-dev/maker-ddd-bundle"
+        }
+    ],
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
@@ -27,11 +33,14 @@
         "symfony/security-bundle": "6.4.*",
         "symfony/serializer": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
+        "symfony/uid": "6.4.*",
         "symfony/validator": "6.4.*",
         "symfony/yaml": "6.4.*"
     },
     "require-dev": {
         "api-platform/schema-generator": "^5.0",
+        "dama/doctrine-test-bundle": "^8.2",
+        "mdavid-dev/maker-ddd-bundle": "^0.0.1",
         "symfony/browser-kit": "6.4.*",
         "symfony/css-selector": "6.4.*",
         "symfony/debug-bundle": "6.4.*",

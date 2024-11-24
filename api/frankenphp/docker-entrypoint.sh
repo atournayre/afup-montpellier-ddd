@@ -30,6 +30,8 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
 			php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
+			php bin/console doctrine:database:create --env=test
+      php bin/console doctrine:migrations:migrate --no-interaction --env=test
 		fi
 	fi
 

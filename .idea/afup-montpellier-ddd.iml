@@ -117,6 +117,11 @@
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/willdurand/negotiation" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/zozlak/rdf-constants" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/messenger" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/uid" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/mdavid-dev/maker-ddd-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/bin/.phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/dama/doctrine-test-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
