@@ -13,6 +13,7 @@ use App\Depense\Domain\VO\DepenseMontant;
 use App\Tests\Depense\InMemory\Model\DepenseInMemory;
 use DateInterval;
 use DateTime;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 final class DepenseFactoryTest extends TestCase
@@ -69,11 +70,18 @@ final class DepenseFactoryTest extends TestCase
             categorie: $depense->categorie()
         );
 
+        $dateHorodatage = $depense->horodatage()->value;
+        $dateDepenseFactory = $depenseFactory->horodatage()->value;
+
+        if (!$dateHorodatage instanceof DateTime || !$dateDepenseFactory instanceof DateTime) {
+            throw new InvalidArgumentException('Les dates ne peuvent pas être null');
+        }
+
         $this->assertEquals($depense->montant(), $depenseFactory->montant());
         $this->assertEquals($depense->description(), $depenseFactory->description());
         $this->assertEquals(
-            $depense->horodatage()->value->format('Y-m-d\TH:i:s.000\Z'),
-            $depenseFactory->horodatage()->value->format('Y-m-d\TH:i:s.000\Z')
+            $dateHorodatage->format('Y-m-d\TH:i:s.000\Z'),
+            $dateDepenseFactory->format('Y-m-d\TH:i:s.000\Z')
         );
         $this->assertEquals($depense->categorie(), $depenseFactory->categorie());
     }

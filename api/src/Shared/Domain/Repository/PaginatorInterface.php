@@ -2,7 +2,15 @@
 
 namespace App\Shared\Domain\Repository;
 
-interface PaginatorInterface extends \IteratorAggregate, \Countable
+use Countable;
+use IteratorAggregate;
+
+/**
+ * @template TKey of array-key
+ * @template TValue
+ * @extends IteratorAggregate<TKey, TValue>
+ */
+interface PaginatorInterface extends IteratorAggregate, Countable
 {
     public function getCurrentPage(): int;
 

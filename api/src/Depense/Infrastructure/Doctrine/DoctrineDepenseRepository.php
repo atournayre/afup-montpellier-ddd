@@ -8,6 +8,9 @@ use App\Shared\Domain\ValueObject\ApiUuid;
 use App\Shared\Infrastructure\Doctrine\DoctrineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @extends DoctrineRepository<Depense>
+ */
 class DoctrineDepenseRepository extends DoctrineRepository implements DepenseRepositoryInterface
 {
     private const ENTITY_CLASS = Depense::class;

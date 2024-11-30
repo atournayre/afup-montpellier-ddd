@@ -5,9 +5,17 @@ namespace App\Shared\Infrastructure\Doctrine;
 use App\Shared\Domain\Repository\PaginatorInterface;
 use App\Shared\Domain\Repository\RepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
+use Iterator;
 
+/**
+ * @template T of object
+ * @implements RepositoryInterface<int, T>
+ */
 class DoctrineRepository implements RepositoryInterface
 {
     private ?int $page = null;
@@ -24,17 +32,31 @@ class DoctrineRepository implements RepositoryInterface
             ->select($alias)
             ->from($entityClass, $alias);
     }
-    public function getIterator(): \Iterator
+
+    /**
+     * @return Iterator<int, T>
+     * @throws Exception
+     */
+    public function getIterator(): Iterator
     {
         if (null !== $paginator = $this->paginator()) {
-            yield from $paginator;
+            /** @var Iterator<int, T> $iterator */
+            $iterator = $paginator->getIterator();
+            yield from $iterator;
 
             return;
         }
 
-        yield from $this->queryBuilder->getQuery()->getResult();
+        /** @var array<int, T> $result */
+        $result = $this->queryBuilder->getQuery()->getResult();
+        yield from $result;
     }
 
+    /**
+     * @return int
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
     public function count(): int
     {
         if (null !== $paginator = $this->paginator()) {
@@ -47,6 +69,9 @@ class DoctrineRepository implements RepositoryInterface
             ->getSingleScalarResult();
     }
 
+    /**
+     * @return PaginatorInterface<int, T>|null
+     */
     public function paginator(): ?PaginatorInterface
     {
         if (null === $this->page || null === $this->itemsPerPage) {
@@ -60,6 +85,7 @@ class DoctrineRepository implements RepositoryInterface
             $qb->setFirstResult($firstResult)->setMaxResults($maxResults);
         });
 
+        /** @var Paginator<T> $paginator */
         $paginator = new Paginator($repository->queryBuilder->getQuery());
 
         return new DoctrinePaginator($paginator);

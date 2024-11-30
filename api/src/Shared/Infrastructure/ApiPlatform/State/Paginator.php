@@ -3,64 +3,58 @@
 namespace App\Shared\Infrastructure\ApiPlatform\State;
 
 use ApiPlatform\State\Pagination\PaginatorInterface;
+use Exception;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @template T of object
+ * @implements IteratorAggregate<mixed, T>
+ * @implements PaginatorInterface<T>
+ */
 final readonly class Paginator implements PaginatorInterface, IteratorAggregate
 {
+    /**
+     * @param Traversable<array-key, T> $items
+     */
     public function __construct(
-        private \Traversable $items,
-        private float $currentPage,
-        private float $itemPerPage,
-        private float $lastPage,
-        private float $totalItems,
+        private Traversable $items,
+        private float      $currentPage,
+        private float      $itemPerPage,
+        private float      $lastPage,
+        private float      $totalItems,
     )
     {
     }
 
     /**
-     * @inheritDoc
+     * @return Traversable<array-key, T>
      */
     public function getIterator(): Traversable
     {
         return $this->items;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function count(): int
     {
         return iterator_count($this->getIterator());
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLastPage(): float
     {
         return $this->lastPage;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getTotalItems(): float
     {
         return $this->totalItems;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getCurrentPage(): float
     {
         return $this->currentPage;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getItemsPerPage(): float
     {
         return $this->itemPerPage;

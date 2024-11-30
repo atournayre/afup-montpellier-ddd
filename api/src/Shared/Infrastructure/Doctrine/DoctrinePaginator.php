@@ -8,11 +8,18 @@ use Exception;
 use InvalidArgumentException;
 use Traversable;
 
+/**
+ * @template T
+ * @implements PaginatorInterface<array-key, T>
+ */
 readonly class DoctrinePaginator implements PaginatorInterface
 {
     private int $firstResult;
     private int $maxResults;
 
+    /**
+     * @param Paginator<T> $paginator
+     */
     public function __construct(
         private Paginator $paginator,
     ) {
@@ -27,6 +34,10 @@ readonly class DoctrinePaginator implements PaginatorInterface
         $this->maxResults = $maxResults;
     }
 
+    /**
+     * @return Traversable<array-key, T>
+     * @throws Exception
+     */
     public function getIterator(): Traversable
     {
         return $this->paginator->getIterator();

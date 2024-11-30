@@ -135,10 +135,17 @@
       <path value="$PROJECT_DIR$/api/vendor/mdavid-dev/maker-ddd-bundle" />
       <path value="$PROJECT_DIR$/api/vendor/bin/.phpunit" />
       <path value="$PROJECT_DIR$/api/vendor/dama/doctrine-test-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/phpstan/phpstan" />
+      <path value="$PROJECT_DIR$/api/vendor/phpstan/extension-installer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStan">
+    <PhpStan_settings>
+      <PhpStanConfiguration tool_path="$PROJECT_DIR$/api/vendor/bin/phpstan" />
+    </PhpStan_settings>
   </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />

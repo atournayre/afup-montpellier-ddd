@@ -122,6 +122,8 @@
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/mdavid-dev/maker-ddd-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/bin/.phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/dama/doctrine-test-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/phpstan/extension-installer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/phpstan/phpstan" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

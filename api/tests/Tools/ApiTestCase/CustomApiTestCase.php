@@ -3,8 +3,10 @@
 namespace App\Tests\Tools\ApiTestCase;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Shared\Domain\Model\BaseEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use InvalidArgumentException;
 use JsonException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -14,8 +16,12 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class CustomApiTestCase extends ApiTestCase
 {
+    /**
+     * @param array<int, object> $entities
+     */
     public function generateDatabaseRecords(array $entities): void
     {
+        /** @var EntityManagerInterface $em */
         $em = self::getContainer()->get(EntityManagerInterface::class);
         foreach ($entities as $entity) {
             $em->persist($entity);
@@ -25,6 +31,7 @@ class CustomApiTestCase extends ApiTestCase
     }
 
     /**
+     * @param array<string, string|array<string, string>>|null $filters
      * @throws TransportExceptionInterface
      */
     public function get(string $url, ?string $token = null, ?string $accept = null, ?array $filters = null): ResponseInterface
@@ -50,6 +57,7 @@ class CustomApiTestCase extends ApiTestCase
     }
 
     /**
+     * @param array<string, mixed> $json
      * @throws TransportExceptionInterface
      */
     public function post(string $url, array $json, ?string $token = null): ResponseInterface
@@ -80,7 +88,11 @@ class CustomApiTestCase extends ApiTestCase
      */
     public function getDescriptionByResponse(ResponseInterface $response): string
     {
-        return json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR)['hydra:description'];
+        /** @var array{'hydra:description': string} $data */
+        $data = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR);
+
+        /** @var string */
+        return $data['hydra:description'];
     }
 
     /**
@@ -95,20 +107,20 @@ class CustomApiTestCase extends ApiTestCase
 
     /**
      * @param ResponseInterface $response
-     * @param object $entity
-     * @return void
+     * @param BaseEntity $entity
      * @throws ClientExceptionInterface
-     * @throws JsonException
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      */
-    public function assertCollectionResponseContainsEntity(ResponseInterface $response, object $entity): void
+    public function assertCollectionResponseContainsEntity(ResponseInterface $response, BaseEntity $entity): void
     {
         try {
-            $entityList = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR)['hydra:member'];
+            /** @var array{'hydra:member': array<int, array{'@id': string}>} $data */
+            $data = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR);
+            $entityList = $data['hydra:member'];
 
-            $entityUuids = array_map(static function($item) {
+            $entityUuids = array_map(static function(array $item): string {
                 return self::getUuidByIri($item['@id']);
             }, $entityList);
 
@@ -126,9 +138,7 @@ class CustomApiTestCase extends ApiTestCase
     }
 
     /**
-     * @param ResponseInterface $response
-     * @param array $entities
-     * @return void
+     * @param array<int, BaseEntity> $entities
      * @throws ClientExceptionInterface
      * @throws JsonException
      * @throws RedirectionExceptionInterface
@@ -138,13 +148,15 @@ class CustomApiTestCase extends ApiTestCase
     public function assertCollectionResponseEqualsEntities(ResponseInterface $response, array $entities): void
     {
         try {
-            $entityList = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR)['hydra:member'];
+            /** @var array{'hydra:member': array<int, array{'@id': string}>} $data */
+            $data = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR);
+            $entityList = $data['hydra:member'];
 
-            $responseUuids = array_map(static function($item) {
+            $responseUuids = array_map(static function(array $item): string {
                 return self::getUuidByIri($item['@id']);
             }, $entityList);
 
-            $expectedUuids = array_map(static function($entity) {
+            $expectedUuids = array_map(static function(BaseEntity $entity): string {
                 return $entity->uuid()->value->toRfc4122();
             }, $entities);
 

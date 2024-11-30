@@ -15,6 +15,7 @@ use App\Depense\Infrastructure\ApiPlatform\State\Processor\AjouterDepenseProcess
 use App\Depense\Infrastructure\ApiPlatform\State\Provider\TrouverDepenseProvider;
 use App\Depense\Infrastructure\ApiPlatform\State\Provider\TrouverToutesLesDepensesProvider;
 use ArrayObject;
+use DateTime;
 use Symfony\Component\Uid\AbstractUid;
 use ApiPlatform\OpenApi\Model;
 
@@ -64,11 +65,16 @@ class DepenseResource
 
     public static function fromModel(Depense $depense): self
     {
+        $horodatageValue = $depense->horodatage()->value;
+        $horodatageFormatted = $horodatageValue instanceof DateTime
+            ? $horodatageValue->format('Y-m-d\TH:i:s.000\Z')
+            : null;
+
         return new self(
             id: $depense->id()->value,
             uuid: $depense->uuid()->value,
             montant: $depense->montant()->value,
-            horodatage: $depense->horodatage()->value->format('Y-m-d\TH:i:s.000\Z'),
+            horodatage: $horodatageFormatted,
             description: $depense->description()->value,
             categorie: $depense->categorie()->value,
         );

@@ -8,14 +8,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait EnumApiResourceTrait
 {
+    /**
+     * @return array<int, static>
+     */
     public static function getCases(): array
     {
         return self::cases();
     }
 
-    public static function getCase(Operation $operation, array $uriVariables)
+    /**
+     * @param Operation $operation
+     * @param array<string, string> $uriVariables
+     * @return static
+     */
+    public static function getCase(Operation $operation, array $uriVariables): static
     {
         $name = $uriVariables['id'] ?? null;
+        /** @var static */
         return constant(self::class . "::$name");
     }
 

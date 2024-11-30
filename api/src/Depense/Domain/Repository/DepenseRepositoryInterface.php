@@ -6,6 +6,9 @@ use App\Depense\Domain\Model\Depense;
 use App\Shared\Domain\Repository\RepositoryInterface;
 use App\Shared\Domain\ValueObject\ApiUuid;
 
+/**
+ * @extends RepositoryInterface<int, Depense>
+ */
 interface DepenseRepositoryInterface extends RepositoryInterface
 {
     public function save(Depense $depense): void;
