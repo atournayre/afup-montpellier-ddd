@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Depense\Application\Command;
 
-use App\Depense\Domain\Exception\DepenseDansLeFuturException;
-use App\Depense\Domain\Exception\DepenseMontantNonPositifException;
+use App\Depense\Domain\Exception\DepenseInvalide;
 use App\Depense\Domain\Factory\DepenseFactory;
 use App\Depense\Domain\Model\Depense;
 use App\Depense\Domain\Repository\DepenseRepositoryInterface;
@@ -20,8 +19,7 @@ final readonly class AjouterDepenseCommandHandler implements CommandHandlerInter
     }
 
     /**
-     * @throws DepenseDansLeFuturException
-     * @throws DepenseMontantNonPositifException
+     * @throws DepenseInvalide
      */
     public function __invoke(AjouterDepenseCommand $command): Depense
     {

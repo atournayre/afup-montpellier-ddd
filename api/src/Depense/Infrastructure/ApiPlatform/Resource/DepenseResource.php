@@ -15,7 +15,6 @@ use App\Depense\Infrastructure\ApiPlatform\State\Processor\AjouterDepenseProcess
 use App\Depense\Infrastructure\ApiPlatform\State\Provider\TrouverDepenseProvider;
 use App\Depense\Infrastructure\ApiPlatform\State\Provider\TrouverToutesLesDepensesProvider;
 use ArrayObject;
-use DateTime;
 use Symfony\Component\Uid\AbstractUid;
 use ApiPlatform\OpenApi\Model;
 
@@ -48,6 +47,7 @@ use ApiPlatform\OpenApi\Model;
         ),
     ]
 )]
+// TODO Pourquoi pas Final ?
 class DepenseResource
 {
     public function __construct(
@@ -65,18 +65,30 @@ class DepenseResource
 
     public static function fromModel(Depense $depense): self
     {
-        $horodatageValue = $depense->horodatage()->value;
-        $horodatageFormatted = $horodatageValue instanceof DateTime
-            ? $horodatageValue->format('Y-m-d\TH:i:s.000\Z')
-            : null;
-
         return new self(
             id: $depense->id()->value,
             uuid: $depense->uuid()->value,
             montant: $depense->montant()->value,
-            horodatage: $horodatageFormatted,
+            // TODO Pourquoi ne pas demander au VO la valeur formatée ?
+            horodatage: $depense->horodatage()->format(),
             description: $depense->description()->value,
             categorie: $depense->categorie()->value,
         );
+    }
+
+    // TODO Pourquoi la resource ne serait elle pas responsable de la validation des données ?
+    public function valider(): array
+    {
+        $erreurs = [];
+
+        if ($this->horodatage === null) {
+            $erreurs['horodatage'] = 'La date est obligatoire';
+        }
+
+        if ($this->categorie === null) {
+            $erreurs['categorie'] = 'La catégorie est obligatoire';
+        }
+
+        return $erreurs;
     }
 }

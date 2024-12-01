@@ -7,7 +7,6 @@ namespace App\Depense\Infrastructure\ApiPlatform\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Depense\Application\Command\AjouterDepenseCommand;
-use App\Depense\Domain\Enum\DepenseCategorieEnum;
 use App\Depense\Domain\Model\Depense;
 use App\Depense\Domain\VO\DepenseCategorie;
 use App\Depense\Domain\VO\DepenseDescription;
@@ -15,8 +14,8 @@ use App\Depense\Domain\VO\DepenseHorodatage;
 use App\Depense\Domain\VO\DepenseMontant;
 use App\Depense\Infrastructure\ApiPlatform\Resource\DepenseResource;
 use App\Shared\Application\Command\CommandBusInterface;
-use DateMalformedStringException;
 use DateTime;
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -34,7 +33,7 @@ final readonly class AjouterDepenseProcessor implements ProcessorInterface
      * @param array<string, string> $uriVariables
      * @param array<string, mixed> $context
      * @return DepenseResource
-     * @throws DateMalformedStringException
+     * @throws Exception
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): DepenseResource
     {
@@ -42,13 +41,8 @@ final readonly class AjouterDepenseProcessor implements ProcessorInterface
             throw new InvalidArgumentException('Les données doivent être une instance de DepenseResource');
         }
 
-        if ($data->horodatage === null) {
-            throw new InvalidArgumentException('La date est obligatoire');
-        }
-
-        if ($data->categorie === null) {
-            throw new InvalidArgumentException('La catégorie est obligatoire');
-        }
+        // TODO Pourquoi déléguer la vérification de la donnée au processor ?
+        $this->valider($data);
 
         /** @var Depense $depense */
         $depense = $this->commandBus->dispatch(new AjouterDepenseCommand(
@@ -59,5 +53,16 @@ final readonly class AjouterDepenseProcessor implements ProcessorInterface
         ));
 
         return DepenseResource::fromModel($depense);
+    }
+
+    private function valider(DepenseResource $data): void
+    {
+        $erreurs = $data->valider();
+
+        if (empty($erreurs)) {
+            return;
+        }
+
+        throw new InvalidArgumentException(current($erreurs));
     }
 }

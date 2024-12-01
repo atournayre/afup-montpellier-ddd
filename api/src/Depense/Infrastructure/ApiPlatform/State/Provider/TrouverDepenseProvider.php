@@ -12,7 +12,6 @@ use App\Depense\Infrastructure\ApiPlatform\Resource\DepenseResource;
 use App\Shared\Application\Query\QueryBusInterface;
 use App\Shared\Domain\ValueObject\ApiUuid;
 use InvalidArgumentException;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @implements ProviderInterface<DepenseResource>
@@ -31,7 +30,7 @@ final readonly class TrouverDepenseProvider implements ProviderInterface
 
         /** @var Depense|null $depense */
         $depense = $this->queryBus->ask(new TrouverDepenseQuery(
-            uuid: new ApiUuid(Uuid::fromString($uriVariables['uuid'])),
+            uuid: ApiUuid::fromString($uriVariables['uuid']),
         ));
 
         return $depense ? DepenseResource::fromModel($depense) : null;

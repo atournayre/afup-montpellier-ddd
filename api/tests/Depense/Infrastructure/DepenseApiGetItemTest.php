@@ -63,7 +63,7 @@ class DepenseApiGetItemTest extends CustomApiTestCase
 
         $this->assertEquals($responseDepense['montant'], $depenseLogement->montant()->value);
         $this->assertEquals($responseDepense['description'], $depenseLogement->description()->value);
-        $this->assertEquals($responseDepense['horodatage'], $horodatage->format('Y-m-d\TH:i:s.000\Z'));
+        $this->assertEquals($responseDepense['horodatage'], $depenseLogement->horodatage()->format());
         $this->assertStringContainsString($depenseLogement->categorie()->value->value, $responseDepense['categorie']);
     }
 }

@@ -16,6 +16,7 @@ final readonly class TrouverDepenseQueryHandler implements QueryHandlerInterface
     {
     }
 
+    // TODO Pourquoi pas un objet de type Depense dans tous les cas (gestion du null) ?
     public function __invoke(TrouverDepenseQuery $query): ?Depense
     {
         return $this->depenseRepository->findByApiUuid($query->uuid);

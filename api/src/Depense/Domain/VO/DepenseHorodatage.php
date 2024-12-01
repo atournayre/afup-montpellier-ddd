@@ -10,10 +10,20 @@ use Doctrine\ORM\Mapping as ORM;
 final readonly class DepenseHorodatage
 {
     #[ORM\Column(name: 'horodatage', type: Types::DATETIME_MUTABLE, nullable: false)]
+    // TODO Utiliser le type DateTimeInterface ?
     public ?DateTime $value;
 
+    // TODO Utiliser le type DateTimeInterface ?
     public function __construct(?DateTime $value)
     {
         $this->value = $value;
+    }
+
+    public function format(): ?string
+    {
+        return $this
+            ->value
+            ?->format('Y-m-d\TH:i:s.000\Z')
+        ;
     }
 }

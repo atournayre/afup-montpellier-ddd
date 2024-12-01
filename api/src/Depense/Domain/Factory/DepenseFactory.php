@@ -2,9 +2,7 @@
 
 namespace App\Depense\Domain\Factory;
 
-use App\Depense\Domain\Enum\DepenseCategorieEnum;
-use App\Depense\Domain\Exception\DepenseDansLeFuturException;
-use App\Depense\Domain\Exception\DepenseMontantNonPositifException;
+use App\Depense\Domain\Exception\DepenseInvalide;
 use App\Depense\Domain\Model\Depense;
 use App\Depense\Domain\VO\DepenseCategorie;
 use App\Depense\Domain\VO\DepenseDescription;
@@ -15,8 +13,7 @@ use DateTime;
 final readonly class DepenseFactory
 {
     /**
-     * @throws DepenseMontantNonPositifException
-     * @throws DepenseDansLeFuturException
+     * @throws DepenseInvalide
      */
     static function creer(
         DepenseMontant     $montant,
@@ -26,11 +23,11 @@ final readonly class DepenseFactory
     ): Depense
     {
         if($montant->value <= 0) {
-            throw new DepenseMontantNonPositifException();
+            throw DepenseInvalide::carLeMontantNEstPasPositif();
         }
 
         if($horodatage->value >= new DateTime()) {
-            throw new DepenseDansLeFuturException();
+            throw DepenseInvalide::carLaDateEstDansLeFutur();
         }
 
         return new Depense(

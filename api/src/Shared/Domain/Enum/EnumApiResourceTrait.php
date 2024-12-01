@@ -21,6 +21,8 @@ trait EnumApiResourceTrait
      * @param array<string, string> $uriVariables
      * @return static
      */
+    // TODO Domaine mais couplé au framework ?
+    // TODO Considéré comme non utilisé par l'IDE mais utilisé dans l'exposition comme resource dans l'enum lui même.
     public static function getCase(Operation $operation, array $uriVariables): static
     {
         $name = $uriVariables['id'] ?? null;

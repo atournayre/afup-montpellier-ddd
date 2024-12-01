@@ -17,10 +17,8 @@ final readonly class TrouverToutesLesDepensesQueryHandler implements QueryHandle
 
     public function __invoke(TrouverToutesLesDepensesQuery $query): DepenseRepositoryInterface
     {
-        if(!is_null($query->page) && !is_null($query->size)) {
-            return $this->depenseRepository->findAll()->withPagination(page: $query->page, itemsPerPage: $query->size);
-        }
-
-        return $this->depenseRepository->findAll();
+        return $this->depenseRepository
+            ->findAll()
+            ->withPagination(page: $query->page, itemsPerPage: $query->size);
     }
 }

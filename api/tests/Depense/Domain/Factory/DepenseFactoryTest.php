@@ -3,8 +3,7 @@
 namespace App\Tests\Depense\Domain\Factory;
 
 use App\Depense\Domain\Enum\DepenseCategorieEnum;
-use App\Depense\Domain\Exception\DepenseDansLeFuturException;
-use App\Depense\Domain\Exception\DepenseMontantNonPositifException;
+use App\Depense\Domain\Exception\DepenseInvalide;
 use App\Depense\Domain\Factory\DepenseFactory;
 use App\Depense\Domain\VO\DepenseCategorie;
 use App\Depense\Domain\VO\DepenseDescription;
@@ -19,11 +18,11 @@ use PHPUnit\Framework\TestCase;
 final class DepenseFactoryTest extends TestCase
 {
     /**
-     * @throws DepenseMontantNonPositifException
+     * @throws DepenseInvalide
      */
     public function testCreerUneDepenseDansLeFuturException(): void
     {
-        $this->expectException(DepenseDansLeFuturException::class);
+        $this->expectException(DepenseInvalide::class);
 
         DepenseFactory::creer(
             montant: new DepenseMontant(123),
@@ -34,11 +33,11 @@ final class DepenseFactoryTest extends TestCase
     }
 
     /**
-     * @throws DepenseDansLeFuturException
+     * @throws DepenseInvalide
      */
     public function testCreerUneDepenseAvecUnMontantNonPositifException(): void
     {
-        $this->expectException(DepenseMontantNonPositifException::class);
+        $this->expectException(DepenseInvalide::class);
 
         DepenseFactory::creer(
             montant: new DepenseMontant(0),
@@ -56,8 +55,7 @@ final class DepenseFactoryTest extends TestCase
     }
 
     /**
-     * @throws DepenseMontantNonPositifException
-     * @throws DepenseDansLeFuturException
+     * @throws DepenseInvalide
      */
     public function testCreerUneDepenseAvecDesParametreOk(): void
     {
@@ -79,10 +77,7 @@ final class DepenseFactoryTest extends TestCase
 
         $this->assertEquals($depense->montant(), $depenseFactory->montant());
         $this->assertEquals($depense->description(), $depenseFactory->description());
-        $this->assertEquals(
-            $dateHorodatage->format('Y-m-d\TH:i:s.000\Z'),
-            $dateDepenseFactory->format('Y-m-d\TH:i:s.000\Z')
-        );
+        $this->assertEquals($depense->horodatage()->format(), $depenseFactory->horodatage()->format());
         $this->assertEquals($depense->categorie(), $depenseFactory->categorie());
     }
 }
