@@ -16,6 +16,7 @@ use Iterator;
  * @template T of object
  * @implements RepositoryInterface<int, T>
  */
+// TODO Compte tenu du fait que le constructeur fait un select, la classe ne devrait elle pas s'appeler DoctrineLectureRepository ou DoctrineReadRepository ou DoctrineQueryRepository ?
 class DoctrineRepository implements RepositoryInterface
 {
     private ?int $page = null;

@@ -3,7 +3,6 @@
 namespace App\Shared\Infrastructure\ApiPlatform\State;
 
 use ApiPlatform\State\Pagination\PaginatorInterface;
-use Exception;
 use IteratorAggregate;
 use Traversable;
 

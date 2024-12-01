@@ -49,6 +49,7 @@ final readonly class TrouverToutesLesDepensesProvider implements ProviderInterfa
         }
 
         if (!is_null($paginator = $depenses->paginator())) {
+            // TODO Le paginator qui dépend d'un autre paginator, ne pourrait on pas simplifier cela ?
             $depensesResource = new Paginator(
                 items: new \ArrayIterator($depensesResource),
                 currentPage: (float) $paginator->getCurrentPage(),

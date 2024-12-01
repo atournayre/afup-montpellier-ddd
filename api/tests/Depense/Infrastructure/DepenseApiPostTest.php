@@ -2,8 +2,6 @@
 
 namespace App\Tests\Depense\Infrastructure;
 
-use App\Depense\Domain\Exception\DepenseDansLeFuturException;
-use App\Depense\Domain\Exception\DepenseMontantNonPositifException;
 use App\Tests\Tools\ApiTestCase\CustomApiTestCase;
 use JsonException;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +52,7 @@ class DepenseApiPostTest extends CustomApiTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         $this->assertEquals(
-            DepenseDansLeFuturException::MESSAGE,
+            'La dépense ne peut pas être dans le futur.',
             $this->getDescriptionByResponse($response)
         );
     }
@@ -81,7 +79,7 @@ class DepenseApiPostTest extends CustomApiTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         $this->assertEquals(
-            DepenseMontantNonPositifException::MESSAGE,
+            'Le montant de la dépense n\'est pas positif.',
             $this->getDescriptionByResponse($response)
         );
     }
@@ -108,7 +106,7 @@ class DepenseApiPostTest extends CustomApiTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         $this->assertEquals(
-            DepenseMontantNonPositifException::MESSAGE,
+            'Le montant de la dépense n\'est pas positif.',
             $this->getDescriptionByResponse($response)
         );
     }

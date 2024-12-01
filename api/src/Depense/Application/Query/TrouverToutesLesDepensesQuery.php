@@ -9,8 +9,10 @@ use App\Shared\Application\Query\QueryInterface;
 final readonly class TrouverToutesLesDepensesQuery implements QueryInterface
 {
     public function __construct(
-        public ?int    $page = null,
-        public ?int    $size = null,
+        // TODO Pourquoi ne pas affecter la valeur par défaut ?
+        public int    $page = 1,
+        // TODO Pourquoi ne pas affecter la valeur par défaut ?
+        public int    $size = 10,
     )
     {
     }

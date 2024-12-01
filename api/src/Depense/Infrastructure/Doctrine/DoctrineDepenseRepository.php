@@ -29,11 +29,13 @@ class DoctrineDepenseRepository extends DoctrineRepository implements DepenseRep
 
     public function findByApiUuid(ApiUuid $apiUuid): ?Depense
     {
+        // TODO Ne pourrait on pas simplifier les méthodes find* ?
         return $this->em->getRepository(self::ENTITY_CLASS)->findOneBy(['uuid.value' => $apiUuid->value]);
     }
 
     public function findAll(): static
     {
+        // TODO Pas très intuitif quand on est habitué à Doctrine, on s'attend à ce que la méthode findAll() retourne un tableau, mais génial couplé à l'usage de la pagination !
         return $this;
     }
 }

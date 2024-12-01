@@ -17,7 +17,9 @@ class BaseEntity
 
     public function __construct()
     {
+        // TODO Un id va être généré à chaque fois que l'objet est créé ?
         $this->id = new ApiId();
+        // TODO Un uuid va être généré à chaque fois que l'objet est créé ?
         $this->uuid = new ApiUuid();
     }
 
